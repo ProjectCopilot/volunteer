@@ -10,6 +10,6 @@ RUN npm install -g n
 RUN sudo n stable
 
 ADD /volunteer /volunteer
-RN cd /volunteer && npm install
+RUN cd /volunteer && npm install
 
 CMD ["/usr/bin/node", "app.js"] 
