@@ -2,8 +2,7 @@
 
 var express = require('express');
 var app = express();
-var dotenv = require('dotenv');
-dotenv.load();
+var dotenv = require('dotenv').config({path: __dirname+'/.env'});
 
 app.get('/', function (req, res) {
       res.send('Hello World!');
