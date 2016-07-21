@@ -12,7 +12,13 @@ app.get("/login", function (req, res) {
     res.send("WIP");
 });
 
-app.listen(process.env.port, process.env.HOSTNAME, function () {
+app.get("/volunteer/:volunteerId", function (req, res) {
+    res.sendFile(__dirname+'/static/index.html');
+});
+
+app.use("/volunteer", express.static(__dirname+"/static"));
+
+app.listen(process.env.PORT, process.env.HOSTNAME, function () {
     console.log('Copilot volunteer interface successfully running at '
         + process.env.HOSTNAME + ':' + process.env.PORT);
 });
