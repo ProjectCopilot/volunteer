@@ -188,13 +188,36 @@ em {
   outline:none;
 }
 
+.titleNavBar {
+  padding: 16px;
+  border-bottom: 1px solid #999;
+  text-align:center;
+  /*height: 60px;*/
+}
+
+.titleNavBar .title {
+  /*font-weight: bold;*/
+  font-size: 12pt;
+}
+
+.titleNavBar #currentCaseName {
+  padding: 0;
+  font-size: 11pt;
+  display: block;
+}
+
+.titleNavBar #currentMessageLastTime {
+  font-size: 8pt;
+  color: #333;
+}
+
 .menu {
   position:absolute;
   width: calc(200px);
   width: -webkit-calc(200px);
   border-right: 1px solid #999;
   height: 100%;
-  font-family: "Open Sans";
+  font-family: "Helvetica Neue", "Open Sans";
 }
 
 .menu .case {
@@ -206,9 +229,25 @@ em {
 
 .menu .case .caseName {
   display: block;
-  font-weight: bold;
-  font-weight: 15pt;
-  margin-bottom: 10px;
+  /*font-weight: bold;*/
+  font-size: 12pt;
+  margin-bottom: 6px;
+}
+
+.menu .case .caseLastMessage {
+  font-size: 10pt;
+}
+
+.messenger {
+  position:absolute;
+  width: -webkit-calc(100% - 200px);
+  width: calc(100% - 200px);
+  right: 0;
+  font-family: "Helvetica Neue";
+}
+
+.messenger .messageSpace {
+    padding: 15px;
 }
 
 button {
