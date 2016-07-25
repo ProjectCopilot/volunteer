@@ -211,16 +211,17 @@ em {
 
 .case .caseName {
   display: block;
+  font-weight: 400;
   /*font-weight: bold;*/
   font-size: 12pt;
   margin-bottom: 6px;
-  margin-left: 100px;
+  margin-left: 65px;
   margin-top: -46px;
 }
 
 .case .caseLastMessage {
   font-size: 10pt;
-  margin-left: 100px;
+  margin-left: 65px;
 }
 
 .columns {
