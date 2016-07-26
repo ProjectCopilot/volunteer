@@ -1,0 +1,303 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css");
+
+body {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+}
+
+.centered {
+    /*height: 150px;*/
+    width: 100%;
+    position: absolute;
+    top: 30%;
+    left: 0;
+    margin-top: -75px;
+}
+
+section {
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 4rem;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+h3 {
+    color: #999;
+    font-size: 1.25rem;
+}
+
+a {
+    text-decoration: inherit;
+    color: #87ceeb;
+}
+
+a:hover {
+    color: #549bb8;
+}
+
+footer {
+    color: #999;
+    font-size: .75rem;
+    text-align: center;
+    height: 40px;
+    width: 100%;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: -40px;
+}
+
+p {
+    margin: 0 10%;
+}
+
+em {
+    color: #f33;
+}
+
+#helper {
+  display:none;
+  line-height: 140%;
+}
+
+.contact {
+  margin-top: 25px;
+}
+
+.contact #mainField {
+  display:none;
+}
+
+.contact #mainOption {
+  display:none;
+}
+
+.contact #mainTextArea {
+  display:none;
+}
+
+.contact input, select {
+  appearance:none;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  background-color: transparent;
+  border-radius: 0;
+  color: #999;
+  font-size: 14pt;
+  font-family: "Open Sans";
+  padding: 8px 50px 8px 8px;
+  border: 0;
+  border-bottom: 2px solid rgba(33, 33, 33, 0.2);
+  margin: 0 0px 15px 0px;
+  width: -webkit-calc(100% - 120px);
+  width: calc(100% - 120px);
+  -webkit-transition: all 0.1s linear;
+  -moz-transition: all 0.1s linear;
+  -o-transition: all 0.1s linear;
+  -ms-transition: all 0.1s linear;
+}
+
+.contact .inputButton {
+    margin-left: 10px;
+    font-size: 14pt;
+    padding: 8px;
+    font-family: "Open Sans";
+    width: 50px;
+    background: #3498db;
+    border-radius: 3px;
+    color: white;
+    border:0;
+    border-bottom: 2px solid transparent;
+    -webkit-appearance: none;
+}
+
+.contact input:focus {
+  outline: none;
+  border-bottom: 2px solid #3498db;
+  color: #3498db;
+}
+
+.contact #submit {
+  font-family: "Open Sans";
+  display:none;
+  border: 1px solid rgba(33, 33, 33, 0.1);
+  border-radius: 4px;
+  background-color: #3498db;
+  color:white;
+  padding: 10px 0px 10px 0px;
+  width: 100%;
+  font-size: 14pt;
+  vertical-align: top;
+}
+
+.contact #backButton {
+  opacity: 0.5!important;
+  -webkit-transition: all 0.1s linear;
+  -moz-transition: all 0.1s linear;
+  -o-transition: all 0.1s linear;
+  -ms-transition: all 0.1s linear;
+  display:none;
+}
+
+.contact #backButton:hover {
+  opacity: 1.0!important;
+  cursor:pointer;
+}
+
+.contact select option:first-child {
+  color: #999;
+}
+
+.contact select:focus {
+  outline: none;
+  border-bottom: 2px solid #3498db;
+  color: #3498db;
+}
+
+.contact textarea {
+  resize: none;
+  font-size: 14pt;
+  font-family: "Open Sans";
+  padding: 8px 8px 8px 8px;
+  margin: 0 auto;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  width: 90%;
+  border-radius: 3px;
+  /*width: calc(100% - 120px);*/
+  border: 1px solid rgba(33, 33, 33, 0.1);
+  /*border-bottom: 2px solid rgba(33, 33, 33, 0.2);*/
+  height: 200px;
+}
+
+.contact textarea:focus {
+  outline:none;
+  border-bottom: 2px solid #3498db;
+  color: #3498db;
+}
+
+.contact button:hover {
+  cursor:pointer;
+}
+
+.contact button:focus {
+  outline:none;
+}
+
+.cases {
+  padding: 0!important;
+  font-family: "Helvetica Neue";
+  height: 359px;
+  overflow: scroll;
+}
+
+.case {
+  font-family: inherit;
+  border-bottom: 1px solid rgba(33, 33, 33, 0.2);
+  padding: 15px;
+  width: 100%;
+  height: 65px;
+}
+
+.case .caseImage {
+  display: inline-block;
+  height: 50px;
+  margin-top: -8px;
+  border-radius: 25%;
+}
+
+.case .caseName {
+  display: block;
+  font-weight: 400;
+  /*font-weight: bold;*/
+  font-size: 12pt;
+  margin-bottom: 6px;
+  margin-left: 65px;
+  margin-top: -46px;
+}
+
+.case .caseLastMessage {
+  font-size: 10pt;
+  margin-left: 65px;
+}
+
+.columns {
+  border: 1px solid rgba(33, 33, 33, 0.2);
+}
+
+.messenger {
+  margin-left: 0 auto;
+  margin-right: 0 auto;
+  font-family: "Helvetica Neue";
+}
+
+.messenger #mainInput {
+  width: 100%;
+  font-size: 11pt;
+  font-family: "Helvetica Neue";
+  font-weight: 300;
+  margin-top: -17px;
+  padding: 10px;
+  border: 0;
+}
+
+.title {
+  border-bottom: 0px;
+  text-align: center;
+  font-family: "Helvetica Neue";
+  font-size: 14pt;
+  padding-top: 15px!important;
+  padding-bottom: 15px!important;
+}
+
+.messenger #mainInput:focus {
+  outline-style: none;
+}
+
+.messenger .messageSpace {
+    padding: 15px;
+    margin-bottom: 10px;
+    height: 300px;
+    overflow: scroll;
+}
+
+.messageSpace .sent {
+  float:right;
+  background-color: rgb(240, 240, 240);
+  color: black;
+  padding: 8px 10px 8px 10px;
+  border-radius:15px;
+}
+
+.messageSpace .received {
+  float:left;
+  color: white;
+  background-color: rgb(0, 132, 255);
+  padding: 8px 10px 8px 10px;
+  border-radius:15px;
+}
+
+button {
+  -webkit-transition: all 0.1s linear;
+  -moz-transition: all 0.1s linear;
+  -o-transition: all 0.1s linear;
+  -ms-transition: all 0.1s linear;
+}
+
+button:hover {
+  filter: brightness(110%);
+  -webkit-filter: brightness(110%);
+}
+
+#requestForm {
+  text-align:center;
+}
+
+@media (max-width: 512px) {
+  #backLabel {
+    display:none;
+  }
+}
