@@ -2,6 +2,7 @@
 
 var express = require('express');
 var app = express();
+var colors = require('colors');
 var dotenv = require('dotenv').config({path: __dirname+'/.env'});
 var fs = require('fs');
 
@@ -17,6 +18,5 @@ app.get("/js/main.js", function (req, res) {
 app.use("/", express.static(__dirname+"/static"));
 
 app.listen(process.env.PORT, process.env.HOSTNAME, function () {
-    console.log('Copilot volunteer interface successfully running at '
-        + process.env.HOSTNAME + ':' + process.env.PORT);
+    console.log(('Copilot Volunteer running at ').blue + (process.env.HOSTNAME+":"+process.env.PORT).magenta);
 });

@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/ProjectCopilot/volunteer#readme",
   "dependencies": {
+    "colors": "^1.1.2",
     "dotenv": "^2.0.0",
     "express": "^4.14.0"
   }
