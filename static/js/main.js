@@ -5,9 +5,15 @@
 
 var HOSTNAME = "{HOSTNAME}";
 var PORT = "{PORT}";
+var MAILROOM_HOSTNAME = "{MAILROOM_HOSTNAME}";
+var MAILROOM_PORT = "{MAILROOM_PORT}";
+
+// temporary max cases variable (used for demo)
+var NUM_MAX_CASES = 5
+
+// Firebase Config
 var FIREBASE_ID = "{FIREBASE_ID}";
 var FIREBASE_API_KEY = "{FIREBASE_API_KEY}";
-
 var config = {
   apiKey: FIREBASE_API_KEY,
   authDomain: FIREBASE_ID+".firebaseapp.com",
@@ -16,7 +22,6 @@ var config = {
 };
 
 firebase.initializeApp(config);
-
 
 var CURRENT_CASE = {};
 
@@ -28,21 +33,24 @@ firebase.auth().signInWithPopup(provider).then(function(result) {
   var token = result.credential.accessToken;
   var user = result.user;
 
-  var root = firebase.database().ref("/");
-  var volunteers = firebase.database().ref("volunteers");
-  var messages = firebase.database().ref("messages");
 
-  firebase.database().ref().child("messages").on("child_added", function (s) {
-    console.log(s.val());
-  });
+  // init database connection
+  var db = firebase.database().ref("/");
 
-  // new message input
-  $("#mainInput").keydown(function (evt) {
-      if (evt.keyCode == 13) {
-        volunteers.child(user.email.replace(".", "")).push({"body": $("#mainInput").val()}, function() {
-          $("#mainInput").val("");
-        });
-      }
+  $.getJSON("//"+HOSTNAME+":"+PORT+"/api/getRequests/"+NUM_MAX_CASES.toString(), function (err, data) {
+      console.log(data);
+      db.child("cases").on("child_added", function (s) {
+        console.log(s.val());
+      });
+
+      // new message input
+      $("#mainInput").keydown(function (evt) {
+          if (evt.keyCode == 13) {
+            volunteers.child(user.email.replace(".", "")).push({"body": $("#mainInput").val()}, function() {
+              $("#mainInput").val("");
+            });
+          }
+      });
   });
 
 
