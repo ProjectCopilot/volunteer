@@ -37,11 +37,19 @@ firebase.auth().signInWithPopup(provider).then(function(result) {
   // init database connection
   var db = firebase.database().ref("/");
 
-  $.getJSON("//"+HOSTNAME+":"+PORT+"/api/getRequests/"+NUM_MAX_CASES.toString(), function (err, data) {
-      console.log(data);
+  // ask the Mailroom for a list of cases to handle
+  $.getJSON("//"+MAILROOM_HOSTNAME+":"+MAILROOM_PORT+"/api/getRequests/"+NUM_MAX_CASES.toString(), function (cases) {
+      for (var k in cases) {
+        var template = '<div class="case"><img class="caseImage" src="https://u.ph.edim.co/default-avatars/45_140.jpg"><span class="caseName">Panda '+k+'</span><span class="caseLastMessage">'+ cases[k].gender +'</span></div>'
+        $(".cases").append(template);
+      }
+
+
       db.child("cases").on("child_added", function (s) {
         console.log(s.val());
       });
+
+
 
       // new message input
       $("#mainInput").keydown(function (evt) {
