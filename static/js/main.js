@@ -39,9 +39,9 @@ firebase.auth().signInWithPopup(provider).then(function(result) {
       for (var k in cases) {
         if (id_count == 0) {
           CURRENT_CASE = k;
-          $("#currentCaseDisplayName").text(CURRENT_CASE);
+          $("#currentCaseDisplayName").text(cases[k].display_name);
         }
-        var template = '<div class="case" id="'+k+'"><img class="caseImage" src="https://u.ph.edim.co/default-avatars/45_140.jpg"><span class="caseName">Panda '+k+'</span><span class="caseLastMessage">'+ cases[k].gender +'</span></div>'
+        var template = '<div class="case" name="'+cases[k].display_name+'"id="'+k+'"><img class="caseImage" src="https://u.ph.edim.co/default-avatars/45_140.jpg"><span class="caseName">'+cases[k].display_name+'</span><span class="caseLastMessage">'+ cases[k].gender +'</span></div>'
         $(".cases").append(template);
         id_count++;
       }
@@ -50,7 +50,7 @@ firebase.auth().signInWithPopup(provider).then(function(result) {
 
       $(".case").click(function() {
         CURRENT_CASE = $(this).attr("id");
-        $("#currentCaseDisplayName").text(CURRENT_CASE);
+        $("#currentCaseDisplayName").text($(this).attr("name"));
       });
 
 
