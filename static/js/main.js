@@ -39,23 +39,29 @@ firebase.auth().signInWithPopup(provider).then(function(result) {
       for (var k in cases) {
         if (id_count == 0) {
           CURRENT_CASE = k;
+          $("#currentCaseDisplayName").text(CURRENT_CASE);
         }
         var template = '<div class="case" id="'+k+'"><img class="caseImage" src="https://u.ph.edim.co/default-avatars/45_140.jpg"><span class="caseName">Panda '+k+'</span><span class="caseLastMessage">'+ cases[k].gender +'</span></div>'
         $(".cases").append(template);
         id_count++;
       }
 
+      updateScroll();
+
       $(".case").click(function() {
         CURRENT_CASE = $(this).attr("id");
+        $("#currentCaseDisplayName").text(CURRENT_CASE);
       });
 
 
       db.child("cases").child(CURRENT_CASE).child('messages').on("child_added", function (s) {
         if (s.val().sender == "user") {
-            $(".messageSpace").append('<div class="received">'+s.val().body+'</div><br /><br /><br />');
+            $(".messageSpace").append('<div class="message from" id="'+s.name+'">'+s.val().body+'</div>');
         } else {
-            $(".messageSpace").append('<div class="sent">'+s.val().body+'</div><br /><br /><br />');
+            $(".messageSpace").append('<div class="message to" id="'+s.name+'">'+s.val().body+'</div>');
         }
+
+        updateScroll();
 
       });
 
@@ -78,3 +84,9 @@ firebase.auth().signInWithPopup(provider).then(function(result) {
   var credential = error.credential;
   // ...
 });
+
+// update bottom of .messageSpace
+function updateScroll(){
+    var element = document.getElementsByClassName("messageSpace");
+    element[0].scrollTop = element[0].scrollHeight+100;
+}

@@ -190,7 +190,7 @@ em {
 .cases {
   padding: 0!important;
   font-family: "Helvetica Neue";
-  height: 359px;
+  height: 369px;
   overflow: scroll;
 }
 
@@ -262,28 +262,47 @@ em {
 }
 
 .messenger .messageSpace {
-    padding: 15px;
-    margin-bottom: 10px;
+    /*padding: 15px;*/
+    margin-bottom: 20px;
     height: 300px;
     overflow: scroll;
     line-height: 100%;
+    min-width: 100px;
+    position: relative;
 }
 
-.messageSpace .sent {
-  background-color: rgb(0, 132, 255);
-  color: white;
-  padding: 8px 10px 8px 10px;
-  border-radius:15px;
-  /*margin-bottom: 10px;*/
+
+.message {
+    border-radius: 15px;
+    margin: 0 15px 10px;
+    padding: 8px 10px 8px 10px;
+    font-size: 11pt;
+    position: relative;
 }
 
-.messageSpace .received {
-  float:left;
-  color: black;
-  background-color: rgb(240, 240, 240);
-  padding: 8px 10px 8px 10px;
-  border-radius:15px;
-  /*margin-bottom: 10px;*/
+.message.to {
+    background-color: #2095FE;
+    color: #fff;
+    clear:both;
+    max-width: 200px;
+    text-align:left;
+    margin-left: calc(100% - 200px);
+    margin-left: -webkit-calc(100% - 200px);
+}
+
+.message.from {
+    background-color: #E5E4E9;
+    color: #363636;
+    clear:both;
+    max-width: 200px;
+    text-align:left;
+    margin-right: calc(100% - 200px);
+    margin-right: -webkit-calc(100% - 200px);
+}
+
+.message.to + .message.to,
+.message.from + .message.from {
+  margin-top: -7px;
 }
 
 button {
