@@ -125,6 +125,6 @@ firebase.auth().signInWithPopup(provider).then(function(result) {
 
 // update bottom of .messageSpace
 function updateScroll(){
-    var element = document.getElementsByClassName("messageSpace");
+    var element = document.getElementsByClassName("messages");
     element[0].scrollTop = element[0].scrollHeight+100;
 }
