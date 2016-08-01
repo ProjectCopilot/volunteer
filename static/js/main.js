@@ -42,9 +42,13 @@ firebase.auth().signInWithPopup(provider).then(function(result) {
         if (id_count == 0) {
           CURRENT_CASE = k;
           $("#currentCaseDisplayName").text(cases[k].display_name);
+          var template = '<div class="case active" name="'+cases[k].display_name+'"id="'+k+'"><img class="caseImage" src="https://u.ph.edim.co/default-avatars/45_140.jpg"><span class="caseName">'+cases[k].display_name+'</span><span class="caseLastMessage">'+ cases[k].gender +'</span></div>'
+          $(".cases").append(template);
+        } else {
+          var template = '<div class="case" name="'+cases[k].display_name+'"id="'+k+'"><img class="caseImage" src="https://u.ph.edim.co/default-avatars/45_140.jpg"><span class="caseName">'+cases[k].display_name+'</span><span class="caseLastMessage">'+ cases[k].gender +'</span></div>'
+          $(".cases").append(template);
         }
-        var template = '<div class="case" name="'+cases[k].display_name+'"id="'+k+'"><img class="caseImage" src="https://u.ph.edim.co/default-avatars/45_140.jpg"><span class="caseName">'+cases[k].display_name+'</span><span class="caseLastMessage">'+ cases[k].gender +'</span></div>'
-        $(".cases").append(template);
+
         id_count++;
       }
 
@@ -70,6 +74,8 @@ firebase.auth().signInWithPopup(provider).then(function(result) {
 
         CURRENT_CASE = $(this).attr("id");
         $("#currentCaseDisplayName").text($(this).attr("name"));
+        $(".case").removeClass("active");
+        $(this).addClass("active");
 
         // change the new message listener to start listening for updates from the new case
         newMessageListener = db.child("cases").child(CURRENT_CASE).child('messages').on('child_added', function (s) {
