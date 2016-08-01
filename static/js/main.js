@@ -66,8 +66,21 @@ firebase.auth().signInWithPopup(provider).then(function(result) {
 
       // when the user selects a new case
       $(".case").click(function() {
+        db.child("cases").child(CURRENT_CASE).child("messages").off(); // detach currently listener
+
         CURRENT_CASE = $(this).attr("id");
         $("#currentCaseDisplayName").text($(this).attr("name"));
+
+        // change the new message listener to start listening for updates from the new case
+        newMessageListener = db.child("cases").child(CURRENT_CASE).child('messages').on('child_added', function (s) {
+          if (s.val().sender == "user") {
+              $(".messageSpace").append('<div class="message from" id="'+s.name+'">'+s.val().body+'</div>');
+          } else {
+              $(".messageSpace").append('<div class="message to" id="'+s.name+'">'+s.val().body+'</div>');
+          }
+
+          updateScroll();
+        });
 
         // pull the selected case's conversation
         db.child("cases").child(CURRENT_CASE).child("messages").once("value", function (s) {
