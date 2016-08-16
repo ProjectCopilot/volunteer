@@ -2,16 +2,16 @@
 // Project Copilot Volunteer Client
 // Copyright 2016 Project Copilot
 
-const MAILROOM_HOSTNAME = '{MAILROOM_HOSTNAME}';
-const MAILROOM_PORT = '{MAILROOM_PORT}';
+const MAILROOM_HOSTNAME = '{{MAILROOM_HOSTNAME}}';
+const MAILROOM_PORT = '{{MAILROOM_PORT}}';
 
 // temporary max cases variable (used for demo)
 const NUM_MAX_CASES = 5;
 let CURRENT_CASE = ''; // current case ID
 
 // Firebase Config
-const FIREBASE_ID = '{FIREBASE_ID}';
-const FIREBASE_API_KEY = '{FIREBASE_API_KEY}';
+const FIREBASE_ID = '{{FIREBASE_ID}}';
+const FIREBASE_API_KEY = '{{FIREBASE_API_KEY}}';
 const config = {
   apiKey: FIREBASE_API_KEY,
   authDomain: `${FIREBASE_ID}.firebaseapp.com`,
