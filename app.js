@@ -13,10 +13,10 @@ app.get('/js/main.js', (req, res) => {
   fs.readFile(`${__dirname}/static/js/main.js`, 'utf-8', (e, data) => {
     if (e) throw e;
     const script = data
-      .replace(/{FIREBASE_ID}/g, process.env.FIREBASE_ID)
-      .replace(/{FIREBASE_API_KEY}/g, process.env.FIREBASE_CLIENT_API_KEY)
-      .replace(/{MAILROOM_PORT}/g, process.env.MAILROOM_PORT)
-      .replace(/{MAILROOM_HOSTNAME}/g, process.env.MAILROOM_HOSTNAME);
+      .replace(/{{FIREBASE_ID}}/g, process.env.FIREBASE_ID)
+      .replace(/{{FIREBASE_API_KEY}}/g, process.env.FIREBASE_CLIENT_API_KEY)
+      .replace(/{{MAILROOM_PORT}}/g, process.env.MAILROOM_PORT)
+      .replace(/{{MAILROOM_HOSTNAME}}/g, process.env.MAILROOM_HOSTNAME);
     res.send(script);
   });
 });
