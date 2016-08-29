@@ -32,7 +32,7 @@ firebase.auth().signInWithPopup(provider).then(() => {
       (cases) => {
       // initially load the cases
         let idCount = 0;
-        cases.forEach((k) => {
+        Object.keys(cases).forEach((k) => {
           if (idCount === 0) {
             CURRENT_CASE = k;
             $('#currentCaseDisplayName').text(cases[k].display_name);
