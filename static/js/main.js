@@ -100,7 +100,6 @@ firebase.auth().signInWithPopup(provider).then(() => {
             .once('value', (s) => {
               $('.messageSpace').html(''); // wipe messageSpace content
               if (s.val() !== null) {
-                console.log(s.val());
                 Object.keys(s.val()).forEach((message) => {
                   if (message.sender === 'user') {
                     $('.messageSpace')
