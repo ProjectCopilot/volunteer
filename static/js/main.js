@@ -81,7 +81,9 @@ firebase.auth().signInWithPopup(provider).then(() => {
           newMessageListener = db.child('cases').child(CURRENT_CASE).child('messages')
             .on('child_added', (s) => {
                 $('.messageSpace')
-                  .append(`<div class="message ${s.val().sender === 'user' ? "from" : "to"} id="${s.name}">${s.val().body}</div>`);
+                  .append(`<div class="message
+                  ${s.val().sender === 'user' ? "from" : "to"}"
+                  id="${s.name}">${s.val().body}</div>`);
               updateScroll();
             });
 
@@ -92,7 +94,9 @@ firebase.auth().signInWithPopup(provider).then(() => {
               if (s.val() !== null) {
                 Object.keys(s.val()).forEach((message) => {
                     $('.messageSpace')
-                      .append(`<div class="message ${s.val()[message].sender === 'user' ? 'from': 'to'}" id="${message}">${s.val()[message].body}</div>`);
+                      .append(`<div class="message
+                      ${s.val()[message].sender === 'user' ? 'from': 'to'}
+                      " id="${message}">${s.val()[message].body}</div>`);
                 });
               }
             });
