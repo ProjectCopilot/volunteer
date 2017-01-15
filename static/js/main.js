@@ -73,9 +73,6 @@ firebase.auth().signInWithPopup(provider).then(() => {
 
           CURRENT_CASE = evt.currentTarget.id;
 
-          console.log(CURRENT_CASE);
-
-          console.log($('#'+evt.currentTarget.id).children('.caseName').text());
           $('#currentCaseDisplayName').text($('#'+evt.currentTarget.id).children('.caseName').text());
           $('.case').removeClass('active');
           $('#'+evt.currentTarget.id).addClass('active');
@@ -83,15 +80,8 @@ firebase.auth().signInWithPopup(provider).then(() => {
           // change the new message listener to start listening for updates from the new case
           newMessageListener = db.child('cases').child(CURRENT_CASE).child('messages')
             .on('child_added', (s) => {
-              if (s.val().sender === 'user') {
                 $('.messageSpace')
-                  .append(`<div class="message from" id="${s.name}">${s.val().body}</div>`);
-              } else {
-                $('.messageSpace')
-                  .append(`<div class="message to" id="${s.name}">`
-                        + `${s.val().body}</div>`);
-              }
-
+                  .append(`<div class="message ${s.val().sender === 'user' ? "from" : "to"} id="${s.name}">${s.val().body}</div>`);
               updateScroll();
             });
 
@@ -101,14 +91,8 @@ firebase.auth().signInWithPopup(provider).then(() => {
               $('.messageSpace').html(''); // wipe messageSpace content
               if (s.val() !== null) {
                 Object.keys(s.val()).forEach((message) => {
-                  if (message.sender === 'user') {
                     $('.messageSpace')
-                      .append(`<div class="message from" id="${message}">${message.body}</div>`);
-                  } else {
-                    $('.messageSpace')
-                      .append(`<div class="message to" id="${message}">`
-                            + `${s.val()[message].body}</div>`);
-                  }
+                      .append(`<div class="message ${s.val()[message].sender === 'user' ? 'from': 'to'}" id="${message}">${s.val()[message].body}</div>`);
                 });
               }
             });
