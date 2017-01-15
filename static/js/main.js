@@ -53,39 +53,37 @@ firebase.auth().signInWithPopup(provider).then(() => {
         // eslint-disable-next-line no-unused-vars
         let newMessageListener = db.child('cases').child(CURRENT_CASE).child('messages')
           .on('child_added', (s) => {
-            if (s.val().sender === 'user') {
-              $('.messageSpace')
-                .append(`<div class="message from" id="${s.name}">${s.val().body}</div>`);
-            } else {
-              $('.messageSpace')
-                .append(`<div class="message to" id="${s.name}">${s.val().body}</div>`);
-            }
-            updateScroll();
-          });
-
-
-        // when the user selects a new case detach current listener
-        $('.case').click(() => {
-          db.child('cases').child(CURRENT_CASE).child('messages')
-            .off();
-
-          CURRENT_CASE = $(this).attr('id');
-          $('#currentCaseDisplayName').text($(this).attr('name'));
-          $('.case').removeClass('active');
-          $(this).addClass('active');
-
-          // change the new message listener to start listening for updates from the new case
-          newMessageListener = db.child('cases').child(CURRENT_CASE).child('messages')
-            .on('child_added', (s) => {
+            if (s.val() != null) {
               if (s.val().sender === 'user') {
                 $('.messageSpace')
                   .append(`<div class="message from" id="${s.name}">${s.val().body}</div>`);
               } else {
                 $('.messageSpace')
-                  .append(`<div class="message to" id="${s.name}">`
-                        + `${s.val().body}</div>`);
+                  .append(`<div class="message to" id="${s.name}">${s.val().body}</div>`);
               }
+              updateScroll();
+            }
+        });
 
+
+        // when the user selects a new case detach current listener
+        $('.case').click((evt) => {
+          db.child('cases').child(CURRENT_CASE).child('messages')
+            .off();
+
+          CURRENT_CASE = evt.currentTarget.id;
+
+          $('#currentCaseDisplayName').text($('#'+evt.currentTarget.id).children('.caseName').text());
+          $('.case').removeClass('active');
+          $('#'+evt.currentTarget.id).addClass('active');
+
+          // change the new message listener to start listening for updates from the new case
+          newMessageListener = db.child('cases').child(CURRENT_CASE).child('messages')
+            .on('child_added', (s) => {
+                $('.messageSpace')
+                  .append(`<div class="message
+                  ${s.val().sender === 'user' ? "from" : "to"}"
+                  id="${s.name}">${s.val().body}</div>`);
               updateScroll();
             });
 
@@ -93,16 +91,14 @@ firebase.auth().signInWithPopup(provider).then(() => {
           db.child('cases').child(CURRENT_CASE).child('messages')
             .once('value', (s) => {
               $('.messageSpace').html(''); // wipe messageSpace content
-              s.val().forEach((message) => {
-                if (message.sender === 'user') {
-                  $('.messageSpace')
-                    .append(`<div class="message from" id="${message}">${message.body}</div>`);
-                } else {
-                  $('.messageSpace')
-                    .append(`<div class="message to" id="${message}">`
-                          + `${s.val()[message].body}</div>`);
-                }
-              });
+              if (s.val() !== null) {
+                Object.keys(s.val()).forEach((message) => {
+                    $('.messageSpace')
+                      .append(`<div class="message
+                      ${s.val()[message].sender === 'user' ? 'from': 'to'}
+                      " id="${message}">${s.val()[message].body}</div>`);
+                });
+              }
             });
         });
 
@@ -130,4 +126,3 @@ function updateScroll() {
   const element = document.getElementsByClassName('messages');
   element[0].scrollTop = element[0].scrollHeight + 100;
 }
-
