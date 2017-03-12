@@ -23,7 +23,18 @@ firebase.initializeApp(config);
 
 // Grant access to Firebase via Google Auth permissions
 const provider = new firebase.auth.GoogleAuthProvider();
-firebase.auth().signInWithPopup(provider).then(() => {
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    // The user is already signed in.
+    init();
+  } else {
+    firebase.auth().signInWithPopup(provider).then(() => {
+      init();
+    });
+  }
+});
+
+function init() {
   // init database connection
   const db = firebase.database().ref('/');
 
@@ -118,8 +129,7 @@ firebase.auth().signInWithPopup(provider).then(() => {
           }
         });
       });
-});
-
+}
 
 // update bottom of .messageSpace
 function updateScroll() {
