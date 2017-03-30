@@ -26,12 +26,16 @@ firebase.initializeApp(config);
 const provider = new firebase.auth.GoogleAuthProvider();
 firebase.auth().onAuthStateChanged((user) => {
   if (user) { // The user is already signed in.
-    AUTH_NAME = user.displayName;
-    init();
+    if (AUTH_NAME.length == 0) {
+      AUTH_NAME = user.displayName;
+      init();
+    }
   } else {
     firebase.auth().signInWithPopup(provider).then((user) => {
-      AUTH_NAME = user.user.displayName;
-      init();
+      if (AUTH_NAME.length == 0) {
+        AUTH_NAME = user.displayName;
+        init();
+      }
     });
   }
 });
@@ -134,6 +138,11 @@ function init() {
         });
       });
 }
+
+// When logout button is pressed
+$("#logOut").click(() => {
+  firebase.auth().signOut();
+});
 
 // update bottom of .messageSpace
 function updateScroll() {

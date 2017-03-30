@@ -279,6 +279,21 @@ em {
   outline-style: none;
 }
 
+#logOut {
+  text-transform: uppercase;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 12pt;
+  font-weight: 700;
+  color: #3498db;
+}
+
+#logOut:hover {
+  cursor:pointer;
+  color: #2980b9;
+}
+
 #team_name {
   font-weight: 500;
 }
@@ -294,7 +309,9 @@ em {
   font-size: 11pt;
   color: rgb(190, 190, 190);
   text-transform: uppercase;
+  padding-top: 5px;
   padding-left: 20px;
+  border-bottom: 5px solid transparent;
 }
 
 .indicator {
@@ -322,7 +339,7 @@ em {
   left: 0;
   width: 220px;
   background-color: #303E4D;
-  color: #FFF;
+  color: rgb(190, 190, 190);
 }
 
 .messages {
@@ -338,6 +355,7 @@ em {
 
 .active {
   background-color: #6698C8;
+  color: #fff;
 }
 
 .case {
@@ -384,7 +402,7 @@ em {
   font-family: "Proxima Nova";
   font-size: 14pt;
   height: 61px;
-  padding-top: 10px!important;
+  padding-top: 12px!important;
   padding-bottom: 15px!important;
   line-height: 110%;
 }
