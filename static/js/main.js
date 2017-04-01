@@ -126,8 +126,8 @@ function init() {
 
 
         // new message input
-        $('#mainInput').keydown((evt) => {
-          if (evt.keyCode === 13 && $('#mainInput').val().length != 0) {
+        $('#mainInput').keyup((evt) => {
+          if (evt.keyCode === 13 && $("#mainInput").val().length != 0) {
             db.child('cases').child(CURRENT_CASE).child('messages')
               .push({
                 body: $('#mainInput').val(),
