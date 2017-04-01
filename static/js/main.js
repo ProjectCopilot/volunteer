@@ -8,6 +8,7 @@ const MAILROOM_PORT = '{{MAILROOM_PORT}}';
 // temporary max cases variable (used for demo)
 const NUM_MAX_CASES = 5;
 let CURRENT_CASE = ''; // current case ID
+let CURRENT_CASENAME = '';
 let AUTH_NAME = '';
 
 // Firebase Config
@@ -54,6 +55,7 @@ function init() {
         Object.keys(cases).forEach((k) => {
           if (idCount === 0) {
             CURRENT_CASE = k;
+            CURRENT_CASENAME = cases[k].display_name;
             $('#currentCaseDisplayName #name').text(cases[k].display_name);
             const template = `<div class="case active" name="${cases[k].display_name}" id="${k}"><span class="caseName"><span class="ion-${cases[k].gender == 'Non-binary' ? 'transgender' : cases[k].gender.toLowerCase()}"></span> ${cases[k].display_name}</span></div>`;
             $('.cases').append(template);
@@ -75,10 +77,10 @@ function init() {
             if (s.val() != null) {
               if (s.val().sender === 'user') {
                 $('.messageSpace')
-                  .append(`<div class="message from" id="${s.name}">${s.val().body}</div>`);
+                  .append(`<div class="message from" id="${s.name}"><div class="sender_name">${s.val().sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}</div>${s.val().body}</div>`);
               } else {
                 $('.messageSpace')
-                  .append(`<div class="message to" id="${s.name}">${s.val().body}</div>`);
+                  .append(`<div class="message to" id="${s.name}"><div class="sender_name">${s.val().sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}</div>${s.val().body}</div>`);
               }
               updateScroll();
             }
@@ -91,6 +93,7 @@ function init() {
             .off();
 
           CURRENT_CASE = evt.currentTarget.id;
+          CURRENT_CASENAME = $('#'+evt.currentTarget.id).children('.caseName').text();
 
           $('#currentCaseDisplayName #name').text($('#'+evt.currentTarget.id).children('.caseName').text());
           $('.case').removeClass('active');
@@ -102,7 +105,7 @@ function init() {
                 $('.messageSpace')
                   .append(`<div class="message
                   ${s.val().sender === 'user' ? "from" : "to"}"
-                  id="${s.name}">${s.val().body}</div>`);
+                  id="${s.name}"><div class="sender_name">${s.val().sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}</div>${s.val().body}</div>`);
               updateScroll();
             });
 
@@ -115,7 +118,7 @@ function init() {
                     $('.messageSpace')
                       .append(`<div class="message
                       ${s.val()[message].sender === 'user' ? 'from': 'to'}
-                      " id="${message}">${s.val()[message].body}</div>`);
+                      " id="${message}"><div class="sender_name">${s.val()[message].sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}</div>${s.val()[message].body}</div>`);
                 });
               }
             });
@@ -124,7 +127,7 @@ function init() {
 
         // new message input
         $('#mainInput').keydown((evt) => {
-          if (evt.keyCode === 13) {
+          if (evt.keyCode === 13 && $('#mainInput').val().length != 0) {
             db.child('cases').child(CURRENT_CASE).child('messages')
               .push({
                 body: $('#mainInput').val(),
