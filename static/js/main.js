@@ -1,6 +1,6 @@
 /* global $, firebase */
 // Project Copilot Volunteer Client
-// Copyright 2016 Project Copilot
+// Copyright 2017 Project Copilot
 
 const MAILROOM_HOSTNAME = '{{MAILROOM_HOSTNAME}}';
 const MAILROOM_PORT = '{{MAILROOM_PORT}}';
@@ -8,6 +8,8 @@ const MAILROOM_PORT = '{{MAILROOM_PORT}}';
 // temporary max cases variable (used for demo)
 const NUM_MAX_CASES = 5;
 let CURRENT_CASE = ''; // current case ID
+let CURRENT_CASENAME = '';
+let AUTH_NAME = '';
 
 // Firebase Config
 const FIREBASE_ID = '{{FIREBASE_ID}}';
@@ -23,7 +25,25 @@ firebase.initializeApp(config);
 
 // Grant access to Firebase via Google Auth permissions
 const provider = new firebase.auth.GoogleAuthProvider();
-firebase.auth().signInWithPopup(provider).then(() => {
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) { // The user is already signed in.
+    if (AUTH_NAME.length == 0) {
+      AUTH_NAME = user.displayName;
+      init();
+    }
+  } else {
+    firebase.auth().signInWithPopup(provider).then((user) => {
+      if (AUTH_NAME.length == 0) {
+        AUTH_NAME = user.displayName;
+        init();
+      }
+    });
+  }
+});
+
+function init() {
+  $("#user_name").text(AUTH_NAME);
+
   // init database connection
   const db = firebase.database().ref('/');
 
@@ -35,11 +55,12 @@ firebase.auth().signInWithPopup(provider).then(() => {
         Object.keys(cases).forEach((k) => {
           if (idCount === 0) {
             CURRENT_CASE = k;
-            $('#currentCaseDisplayName').text(cases[k].display_name);
-            const template = `<div class="case active" name="${cases[k].display_name}" id="${k}"><img class="caseImage" src="https://u.ph.edim.co/default-avatars/45_140.jpg"><span class="caseName">${cases[k].display_name}</span><span class="caseLastMessage">${cases[k].gender}</span></div>`;
+            CURRENT_CASENAME = cases[k].display_name;
+            $('#currentCaseDisplayName #name').text(cases[k].display_name);
+            const template = `<div class="case active" name="${cases[k].display_name}" id="${k}"><span class="caseName"><span class="ion-${cases[k].gender == 'Non-binary' ? 'transgender' : cases[k].gender.toLowerCase()}"></span> ${cases[k].display_name}</span></div>`;
             $('.cases').append(template);
           } else {
-            const template = `<div class="case" name="${cases[k].display_name}" id="${k}"><img class="caseImage" src="https://u.ph.edim.co/default-avatars/45_140.jpg"><span class="caseName">${cases[k].display_name}</span><span class="caseLastMessage">${cases[k].gender}</span></div>`;
+            const template = `<div class="case" name="${cases[k].display_name}" id="${k}"><span class="caseName"><span class="ion-${cases[k].gender == 'Non-binary' ? 'transgender' : cases[k].gender.toLowerCase()}"></span> ${cases[k].display_name}</span></div>`;
             $('.cases').append(template);
           }
 
@@ -56,10 +77,10 @@ firebase.auth().signInWithPopup(provider).then(() => {
             if (s.val() != null) {
               if (s.val().sender === 'user') {
                 $('.messageSpace')
-                  .append(`<div class="message from" id="${s.name}">${s.val().body}</div>`);
+                  .append(`<div class="message from" id="${s.name}"><div class="sender_name">${s.val().sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}</div>${s.val().body}</div>`);
               } else {
                 $('.messageSpace')
-                  .append(`<div class="message to" id="${s.name}">${s.val().body}</div>`);
+                  .append(`<div class="message to" id="${s.name}"><div class="sender_name">${s.val().sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}</div>${s.val().body}</div>`);
               }
               updateScroll();
             }
@@ -72,8 +93,9 @@ firebase.auth().signInWithPopup(provider).then(() => {
             .off();
 
           CURRENT_CASE = evt.currentTarget.id;
+          CURRENT_CASENAME = $('#'+evt.currentTarget.id).children('.caseName').text();
 
-          $('#currentCaseDisplayName').text($('#'+evt.currentTarget.id).children('.caseName').text());
+          $('#currentCaseDisplayName #name').text($('#'+evt.currentTarget.id).children('.caseName').text());
           $('.case').removeClass('active');
           $('#'+evt.currentTarget.id).addClass('active');
 
@@ -83,7 +105,7 @@ firebase.auth().signInWithPopup(provider).then(() => {
                 $('.messageSpace')
                   .append(`<div class="message
                   ${s.val().sender === 'user' ? "from" : "to"}"
-                  id="${s.name}">${s.val().body}</div>`);
+                  id="${s.name}"><div class="sender_name">${s.val().sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}</div>${s.val().body}</div>`);
               updateScroll();
             });
 
@@ -96,7 +118,7 @@ firebase.auth().signInWithPopup(provider).then(() => {
                     $('.messageSpace')
                       .append(`<div class="message
                       ${s.val()[message].sender === 'user' ? 'from': 'to'}
-                      " id="${message}">${s.val()[message].body}</div>`);
+                      " id="${message}"><div class="sender_name">${s.val()[message].sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}</div>${s.val()[message].body}</div>`);
                 });
               }
             });
@@ -118,8 +140,12 @@ firebase.auth().signInWithPopup(provider).then(() => {
           }
         });
       });
-});
+}
 
+// When logout button is pressed
+$("#logOut").click(() => {
+  firebase.auth().signOut();
+});
 
 // update bottom of .messageSpace
 function updateScroll() {
