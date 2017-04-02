@@ -408,19 +408,18 @@ em {
 }
 
 .messenger .messageSpace {
-    /*padding: 15px;*/
     margin-bottom: 20px;
     height: calc(100% - 100px);
     height: -webkit-calc(100% - 100px);
     overflow-y: scroll;
-    line-height: 100%;
+    line-height: 130%;
     min-width: 100px;
     position: relative;
 }
 
-
 .message {
-    border-radius: 15px;
+    width: calc(100% - 30px);
+    width: -webkit-calc(100% - 30px);
     margin: 0 15px 10px;
     font-size: 11pt;
     position: relative;
