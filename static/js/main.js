@@ -6,7 +6,7 @@ const MAILROOM_HOSTNAME = '{{MAILROOM_HOSTNAME}}';
 const MAILROOM_PORT = '{{MAILROOM_PORT}}';
 
 // temporary max cases variable (used for demo)
-const NUM_MAX_CASES = 5;
+const NUM_MAX_CASES = 10;
 let CURRENT_CASE = ''; // current case ID
 let CURRENT_CASENAME = '';
 let AUTH_NAME = '';
