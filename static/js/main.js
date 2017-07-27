@@ -6,7 +6,7 @@ const MAILROOM_HOSTNAME = '{{MAILROOM_HOSTNAME}}';
 const MAILROOM_PORT = '{{MAILROOM_PORT}}';
 
 // temporary max cases variable (used for demo)
-const NUM_MAX_CASES = 10;
+const NUM_MAX_CASES = 10000;
 let CURRENT_CASE = ''; // current case ID
 let CURRENT_CASENAME = '';
 let AUTH_NAME = '';
@@ -86,6 +86,10 @@ function init() {
             }
         });
 
+        // Initially poll the Firebase for current case's notes
+        db.child('cases').child(CURRENT_CASE).child('notes').once('value', (s) => {
+            $('.notes').val(s.val() == null ? '' : s.val());
+        });
 
         // when the user selects a new case detach current listener
         $('.case').click((evt) => {
@@ -122,6 +126,10 @@ function init() {
                 });
               }
             });
+
+          db.child('cases').child(CURRENT_CASE).child('notes').once('value', (s) => {
+            $('.notes').val(s.val() == null ? '' : s.val());
+          });
         });
 
 
@@ -138,6 +146,21 @@ function init() {
                 $('#mainInput').val('');
               });
           }
+        });
+
+        // Notes real-time editing
+        var typingTimer;
+        $('.notes').keyup(function() {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(function() {
+              // upload to Firebase
+              db.child('cases').child(CURRENT_CASE).child('notes').set($('.notes').val())
+            }, 200);
+        });
+
+        //on keydown, clear the countdown
+        $('.notes').keydown(function() {
+            clearTimeout(typingTimer);
         });
       });
 }
