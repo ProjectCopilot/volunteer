@@ -1,4 +1,7 @@
-// Copilot Volunteer Interface
+/*
+  * Copilot Volunteer
+  * (c) Copyright 2016-2017 Project Copilot
+*/
 
 const express = require('express');
 const app = express();
@@ -19,6 +22,10 @@ app.get('/js/main.js', (req, res) => {
       .replace(/{{MAILROOM_HOSTNAME}}/g, process.env.MAILROOM_HOSTNAME);
     res.send(script);
   });
+});
+
+app.use('/login', (req, res) => {
+  res.sendFile(`${__dirname}/static/login.html`);
 });
 
 app.use('/', express.static(`${__dirname}/static`));
