@@ -466,6 +466,14 @@ em {
     font-size: 12pt;
 }
 
+.message .date {
+    font-size: 12pt;
+    font-weight: 300;
+    color: #999;
+    display: inline-block;
+    margin-left: 10px;
+}
+
 .message.to {
     clear:both;
     text-align:left;

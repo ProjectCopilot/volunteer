@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <link href='//fonts.googleapis.com/css?family=Open+Sans:300, 500, 700, 900' rel='stylesheet' type='text/css'>
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:300, 500, 700, 900" rel="stylesheet" type="text/css">
         <link href="//cdn.rawgit.com/rohitkrai03/pills/gh-pages/dist/pills.min.css" rel="stylesheet" type="text/css">
         <link href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
         <script src="//www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.js"></script>
@@ -11,6 +11,8 @@
         <title>Copilot Volunteer</title>
     </head>
     <body>
+
+        <!-- Main tool bar -->
         <div id="caseTitle" class="title">
           <span id="team_name">Copilot</span><br />
           <div class="indicator"></div>
@@ -29,6 +31,8 @@
         <div class="cases">
           <div class="section_title">Cases</div>
         </div>
+
+	<!-- Messaging component -->
         <div class="messages">
           <center>
             <div class="messenger">
@@ -36,15 +40,15 @@
             </div>
           </center>
         </div>
+	<input id="mainInput" type="text" placeholder="Type a message..." maxlength="1600"/>
+
+	<!-- Notes component -->
         <textarea class="notes" placeholder="Type your notes here..."></textarea>
-        <input id="mainInput" type="text" placeholder="Type a message..." maxlength="1600"/>
 
-        <!-- <footer>
-            <p>If you or a friend are in immediate danger, call <em>911</em> or local emergency services.</p>
-        </footer> -->
-
+	<!-- Additional scripts -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
         <script src="//cdn.jsdelivr.net/lodash/4.13.1/lodash.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/timeago.js/3.0.2/timeago.min.js"></script>
         <script src="//www.gstatic.com/firebasejs/3.2.0/firebase.js"></script>
         <script src="js/main.js"></script>
     </body>

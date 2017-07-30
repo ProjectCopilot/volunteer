@@ -5,11 +5,11 @@
 const MAILROOM_HOSTNAME = '{{MAILROOM_HOSTNAME}}';
 const MAILROOM_PORT = '{{MAILROOM_PORT}}';
 
-// temporary max cases variable (used for demo)
+// max number of cases
 const NUM_MAX_CASES = 10000;
 let CURRENT_CASE = ''; // current case ID
-let CURRENT_CASENAME = '';
-let AUTH_NAME = '';
+let CURRENT_CASENAME = ''; // current case name (e.g. Anonymous Cow)
+let AUTH_NAME = ''; // volunteer name (e.g. Ankit Ranjan)
 
 // Firebase Config
 const FIREBASE_ID = '{{FIREBASE_ID}}';
@@ -41,6 +41,9 @@ firebase.auth().onAuthStateChanged((user) => {
   }
 });
 
+// Timeago Timestamp Config
+var time = timeago();
+
 function init() {
   $("#user_name").text(AUTH_NAME);
 
@@ -69,24 +72,30 @@ function init() {
 
         updateScroll();
 
-
         // when a new message arrives
-        // eslint-disable-next-line no-unused-vars
         let newMessageListener = db.child('cases').child(CURRENT_CASE).child('messages')
           .on('child_added', (s) => {
             if (s.val() != null) {
+              const message = s.val();
               if (s.val().sender === 'user') {
                 $('.messageSpace')
-                  .append(`<div class="message from" id="${s.name}"><div class="sender_name">${s.val().sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}</div>${s.val().body}</div>`);
+                  .append(`<div class="message from" id="${s.name}">
+                            <div class="sender_name">${message.sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}
+                            <div class="date" datetime="${message.time}"></div>
+                          </div>${message.body}</div>`);
               } else {
                 $('.messageSpace')
-                  .append(`<div class="message to" id="${s.name}"><div class="sender_name">${s.val().sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}</div>${s.val().body}</div>`);
+                  .append(`<div class="message to" id="${s.name}">
+                            <div class="sender_name">${message.sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}
+                            <div class="date" datetime="${message.time}"></div>
+                          </div>${message.body}</div>`);
               }
               updateScroll();
+              updateTimestamps();
             }
         });
 
-        // Initially poll the Firebase for current case's notes
+        // initially poll the Firebase for current case's notes
         db.child('cases').child(CURRENT_CASE).child('notes').once('value', (s) => {
             $('.notes').val(s.val() == null ? '' : s.val());
         });
@@ -106,24 +115,34 @@ function init() {
           // change the new message listener to start listening for updates from the new case
           newMessageListener = db.child('cases').child(CURRENT_CASE).child('messages')
             .on('child_added', (s) => {
+                const message = s.val();
                 $('.messageSpace')
                   .append(`<div class="message
-                  ${s.val().sender === 'user' ? "from" : "to"}"
-                  id="${s.name}"><div class="sender_name">${s.val().sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}</div>${s.val().body}</div>`);
+                  ${s.val().sender === 'user' ? "from" : "to"}
+                  " id="${s.name}"><div class="sender_name">${message.sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}
+        	          <div class="date" datetime="${message.time}"></div>
+                  </div>${message.body}</div>`);
+
               updateScroll();
+              updateTimestamps();
             });
 
           // pull the selected case's conversation
           db.child('cases').child(CURRENT_CASE).child('messages')
             .once('value', (s) => {
+              const message = s.val();
               $('.messageSpace').html(''); // wipe messageSpace content
               if (s.val() !== null) {
-                Object.keys(s.val()).forEach((message) => {
+                Object.keys(message).forEach((id) => {
                     $('.messageSpace')
                       .append(`<div class="message
-                      ${s.val()[message].sender === 'user' ? 'from': 'to'}
-                      " id="${message}"><div class="sender_name">${s.val()[message].sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}</div>${s.val()[message].body}</div>`);
+                      ${message[id].sender === 'user' ? 'from': 'to'}
+                      " id="${id}"><div class="sender_name">${message[id].sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}
+		                    <div class="date" datetime="${message[id].time}"></div>
+                      </div>${message[id].body}</div>`);
                 });
+
+                updateTimestamps();
               }
             });
 
@@ -142,36 +161,45 @@ function init() {
                 sent: false,
                 sender: 'volunteer',
                 from: 'copilot',
+                time: Date.now()
               }, () => {
                 $('#mainInput').val('');
+                updateTimestamps();
               });
           }
         });
 
-        // Notes real-time editing
+        // notes real-time editing
         var typingTimer;
-        $('.notes').keyup(function() {
+        $('.notes').keyup(() => {
             clearTimeout(typingTimer);
-            typingTimer = setTimeout(function() {
+            typingTimer = setTimeout(() => {
               // upload to Firebase
               db.child('cases').child(CURRENT_CASE).child('notes').set($('.notes').val())
             }, 200);
         });
 
         //on keydown, clear the countdown
-        $('.notes').keydown(function() {
+        $('.notes').keydown(() => {
             clearTimeout(typingTimer);
         });
       });
 }
 
-// When logout button is pressed
+// when logout button is pressed
 $("#logOut").click(() => {
   firebase.auth().signOut();
 });
 
-// update bottom of .messageSpace
+// update bottom of .messageSpace UI handler
 function updateScroll() {
   const element = document.getElementsByClassName('messages');
   element[0].scrollTop = element[0].scrollHeight + 100;
+}
+
+// refresh pretty message timestamps
+function updateTimestamps() {
+  timeago.cancel();
+  const timestamps = document.querySelectorAll('.date');
+  time.render(timestamps);
 }
