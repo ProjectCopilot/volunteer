@@ -41,7 +41,7 @@ html {
 }
 
 body {
-    font-family: "Open Sans", sans-serif;
+    font-family: "Proxima Nova", sans-serif;
     font-weight: 300;
     height: 100%;
     overflow: auto;
@@ -105,133 +105,9 @@ em {
   line-height: 140%;
 }
 
-.contact {
-  margin-top: 25px;
-}
-
-.contact #mainField {
-  display:none;
-}
-
-.contact #mainOption {
-  display:none;
-}
-
-.contact #mainTextArea {
-  display:none;
-}
-
-.contact input, select {
-  appearance:none;
-  -webkit-appearance:none;
-  -moz-appearance:none;
-  background-color: transparent;
-  border-radius: 0;
-  color: #999;
-  font-size: 14pt;
-  font-family: "Open Sans";
-  padding: 8px 50px 8px 8px;
-  border: 0;
-  border-bottom: 2px solid rgba(33, 33, 33, 0.2);
-  margin: 0 0px 15px 0px;
-  width: -webkit-calc(100% - 120px);
-  width: calc(100% - 120px);
-  -webkit-transition: all 0.1s linear;
-  -moz-transition: all 0.1s linear;
-  -o-transition: all 0.1s linear;
-  -ms-transition: all 0.1s linear;
-}
-
-.contact .inputButton {
-    margin-left: 10px;
-    font-size: 14pt;
-    padding: 8px;
-    font-family: "Open Sans";
-    width: 50px;
-    background: #3498db;
-    border-radius: 3px;
-    color: white;
-    border:0;
-    border-bottom: 2px solid transparent;
-    -webkit-appearance: none;
-}
-
-.contact input:focus {
-  outline: none;
-  border-bottom: 2px solid #3498db;
-  color: #3498db;
-}
-
-.contact #submit {
-  font-family: "Open Sans";
-  display:none;
-  border: 1px solid rgba(33, 33, 33, 0.1);
-  border-radius: 4px;
-  background-color: #3498db;
-  color:white;
-  padding: 10px 0px 10px 0px;
-  width: 100%;
-  font-size: 14pt;
-  vertical-align: top;
-}
-
-.contact #backButton {
-  opacity: 0.5!important;
-  -webkit-transition: all 0.1s linear;
-  -moz-transition: all 0.1s linear;
-  -o-transition: all 0.1s linear;
-  -ms-transition: all 0.1s linear;
-  display:none;
-}
-
-.contact #backButton:hover {
-  opacity: 1.0!important;
-  cursor:pointer;
-}
-
-.contact select option:first-child {
-  color: #999;
-}
-
-.contact select:focus {
-  outline: none;
-  border-bottom: 2px solid #3498db;
-  color: #3498db;
-}
-
-.contact textarea {
-  resize: none;
-  font-size: 14pt;
-  font-family: "Open Sans";
-  padding: 8px 8px 8px 8px;
-  margin: 0 auto;
-  margin-top: 10px;
-  margin-bottom: 15px;
-  width: 90%;
-  border-radius: 3px;
-  /*width: calc(100% - 120px);*/
-  border: 1px solid rgba(33, 33, 33, 0.1);
-  /*border-bottom: 2px solid rgba(33, 33, 33, 0.2);*/
-  height: 200px;
-}
-
-.contact textarea:focus {
-  outline:none;
-  border-bottom: 2px solid #3498db;
-  color: #3498db;
-}
-
-.contact button:hover {
-  cursor:pointer;
-}
-
-.contact button:focus {
-  outline:none;
-}
-
 #caseTitle {
   width: 220px;
-  height: 61px;
+  height: 62px;
   position:absolute;
   left:0;
   top:0;
@@ -248,7 +124,7 @@ em {
 #currentCaseDisplayName {
   width: calc(100% - 220px);
   width: -webkit-calc(100% - 220px);
-  height: 61px;
+  height: 62px;
   position: absolute;
   right: 0;
   top:0 ;
@@ -257,41 +133,59 @@ em {
   font-weight: 500;
   text-align: left;
   padding-left: 20px;
-  border-bottom: 1px solid rgba(33, 33, 33, 0.1);
+  border-bottom: 2px solid rgba(33, 33, 33, 0.1);
 }
 
 #mainInput {
   position:absolute;
   bottom: 0;
-  right: 0;
-  width: calc(100% - 220px);
-  width: -webkit-calc(100% - 220px);
+  left: 220px;
+  width: calc(75% - 220px);
+  width: -webkit-calc(75% - 220px);
   font-size: 11pt;
   font-family: "Proxima Nova";
   font-weight: 400;
   margin-top: -17px;
   padding: 15px;
   border: 0;
-  border-top: 1px solid rgba(33, 33, 33, 0.2);
+  border-top: 2px solid rgba(33, 33, 33, 0.2);
+  -webkit-transition: all 0.1s linear;
+  -moz-transition: all 0.1s linear;
+  -o-transition: all 0.1s linear;
+  -ms-transition: all 0.1s linear;
 }
 
 #mainInput:focus {
   outline-style: none;
+  border-top: 2px solid #6698C8;
+}
+
+#warning {
+  font-weight: 400;
 }
 
 #logOut {
-  text-transform: uppercase;
   position: absolute;
   top: 10px;
   right: 10px;
-  font-size: 12pt;
-  font-weight: 700;
-  color: #3498db;
+  font-size: 10pt;
+  font-weight: 400;
+  border-radius: 1px;
+  color: #333;
+  font-family: 'Proxima Nova';
+  padding: 10px 15px 10px 15px;
+  border: 1px solid #999;
+  height: 40px;
+  -webkit-transition: all 0.1s linear;
+  -moz-transition: all 0.1s linear;
+  -o-transition: all 0.1s linear;
+  -ms-transition: all 0.1s linear;
 }
 
 #logOut:hover {
   cursor:pointer;
-  color: #2980b9;
+  background-color: #6698C8;
+  color: #fff;
 }
 
 #team_name {
@@ -330,10 +224,10 @@ em {
 .cases {
   padding: 10px 0!important;
   font-family: "Proxima Nova";
-  height: -webkit-calc(100% - 61px);
-  height: calc(100% - 61px);
+  height: -webkit-calc(100% - 62px);
+  height: calc(100% - 62px);
   position:absolute;
-  top: 61px;
+  top: 62px;
   overflow: scroll;
   border-right: 1px solid rgba(33, 33, 33, 0.2);
   left: 0;
@@ -358,12 +252,12 @@ em {
   right: 0;
   width: calc(25%);
   width: -webkit-calc(25%);
-  height: calc(100% - 111px);
-  height: -webkit-calc(100% - 111px);
+  height: calc(100% - 62px);
+  height: -webkit-calc(100% - 62px);
   overflow: scroll;
-  top: 61px;
+  top: 62px;
   border: 0;
-  border-left: 1px solid rgba(33, 33, 33, 0.2);
+  border-left: 2px solid rgba(33, 33, 33, 0.2);
   padding: 10px;
   font-size: 12pt;
   background-color: #fffefb;
@@ -419,7 +313,7 @@ em {
 }
 
 .columns {
-  border: 1px solid rgba(33, 33, 33, 0.2);
+  border: 2px solid rgba(33, 33, 33, 0.2);
 }
 
 .messenger {
@@ -433,7 +327,7 @@ em {
   text-align: center;
   font-family: "Proxima Nova";
   font-size: 14pt;
-  height: 61px;
+  height: 60px;
   padding-top: 12px!important;
   padding-bottom: 15px!important;
   line-height: 110%;
@@ -498,14 +392,4 @@ button {
 button:hover {
   filter: brightness(110%);
   -webkit-filter: brightness(110%);
-}
-
-#requestForm {
-  text-align:center;
-}
-
-@media (max-width: 512px) {
-  #backLabel {
-    display:none;
-  }
 }
