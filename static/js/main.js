@@ -32,12 +32,8 @@ firebase.auth().onAuthStateChanged((user) => {
       init();
     }
   } else {
-    firebase.auth().signInWithPopup(provider).then((user) => {
-      if (AUTH_NAME.length == 0) {
-        AUTH_NAME = user.displayName;
-        init();
-      }
-    });
+    // Redirect to the login page
+    location.href = "/login"
   }
 });
 

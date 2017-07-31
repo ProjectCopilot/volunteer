@@ -3,15 +3,21 @@
   <head>
     <meta charset=utf-8>
     <meta name=viewport content="initial-scale=1, minimum-scale=1, width=device-width">
-    <link href="css/login.css" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="/favicon.png">
+    <script src="//www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="//www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.css" />
+    <link href="/css/login.css" rel="stylesheet" type="text/css">
     <title>Copilot Volunteer Login</title>
   </head>
   <body>
-    <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
-    <p><b>Volunteers!</b> <ins>We need your help.</ins></p>
+    <a href=//www.copilot.help/><h1 id=logo aria-label=Copilot>Copilot</h1></a>
+    <p>Volunteers are an important part of our system. If you've already received an invitation for Copilot's beta, you're in the right place. Lorem ipsum here's some more placeholder webcopy.</p>
+
     <p>Welcome to the team. <ins>Sign in with Google to continue.</ins></p>
-    <button class="loginBtn loginBtn--google">
-      Login with Google
-    </button>
+    <div id="login" class="loginBtn google">Login with Google</div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="//www.gstatic.com/firebasejs/3.2.0/firebase.js"></script>
+    <script src="/js/login.js"></script>
   </body>
 </html>
