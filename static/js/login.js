@@ -23,8 +23,8 @@ firebase.auth().onAuthStateChanged((user) => {
     location.href = "/"; // Redirect to main client
 });
 
-$('#login').click(() => {
+document.getElementById('login').onclick = () => {
   firebase.auth().signInWithPopup(provider).then((user) => {
       location.href = "/"
   });
-});
+};
