@@ -60,6 +60,8 @@ function init() {
             CURRENT_CASE = k;
             CURRENT_CASENAME = cases[k].display_name;
             $('#currentCaseDisplayName #name').text(cases[k].display_name);
+            $('#gender').addClass(cases[k].gender == 'Non-binary' ? 'ion-transgender' : 'ion-'+cases[k].gender.toLowerCase());
+
             const template = `<div class="case active" name="${cases[k].display_name}" id="${k}"><span class="caseName"><span class="ion-${cases[k].gender == 'Non-binary' ? 'transgender' : cases[k].gender.toLowerCase()}"></span> ${cases[k].display_name}</span></div>`;
             $('.cases').append(template);
           } else {
@@ -109,6 +111,9 @@ function init() {
           CURRENT_CASENAME = $('#'+evt.currentTarget.id).children('.caseName').text();
 
           $('#currentCaseDisplayName #name').text($('#'+evt.currentTarget.id).children('.caseName').text());
+          $("#gender").removeClass($("#gender").attr('class'));
+          $('#gender').addClass($('#'+evt.currentTarget.id).children('.caseName').children('span:nth-child(1)').attr('class'));
+
           $('.case').removeClass('active');
           $('#'+evt.currentTarget.id).addClass('active');
 
