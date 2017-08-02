@@ -1,0 +1,149 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css");
+
+@font-face {
+    font-family: 'Proxima Nova Soft Semibold';
+    src: url('../fonts/proxima-nova-soft-semibold.otf');
+}
+
+@font-face {
+  src:url("../fonts/proximanova-bold-webfont.ttf");
+  font-family: "Proxima Nova"; font-weight: 700;
+}
+
+@font-face {
+  src:url("../fonts/proximanova-semibold-webfont.ttf");
+  font-family: "Proxima Nova"; font-weight: 500;
+}
+
+@font-face {
+  src:url("../fonts/proximanova-light-webfont.ttf");
+  font-family: "Proxima Nova"; font-weight: 300;
+}
+
+@font-face {
+  src:url("../fonts/proximanova-regular-webfont.ttf");
+  font-family: "Proxima Nova"; font-weight: 400;
+}
+
+* {
+    margin: 0;
+    padding: 0
+}
+
+html,
+code {
+    font: 15px/22px arial, sans-serif
+}
+
+html {
+    background: #fff;
+    color: #222;
+    padding: 15px
+}
+
+body {
+    margin: 7% auto 0;
+    max-width: 390px;
+    min-height: 180px;
+    padding: 30px 0 15px;
+    font-family: 'Proxima Nova';
+}
+
+h1 {
+    font-size: 4rem;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+p {
+    margin: 11px 0 22px;
+    overflow: hidden;
+    line-height: 1.6em;
+    text-rendering: optimizeLegibility;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+}
+
+ins {
+    color: #777;
+    text-decoration: none;
+}
+
+a img {
+    border: 0;
+}
+
+a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:visited {
+    color: #3498db;
+    text-decoration: none;
+}
+
+@media screen and (max-width:480px) {
+    body {
+        background: none;
+        margin-top: 0;
+        max-width: none;
+        padding: 10px;
+    }
+
+    #logo {
+        font-size: 35pt;
+        margin-bottom: -10px;
+    }
+
+    #volunteers {
+        display: none;
+    }
+}
+
+#logo {
+    font-family: "Proxima Nova Soft Semibold";
+    background: -webkit-linear-gradient(0deg, #287bd4, #68c779);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display:inline-block;
+    margin-left:-5px;
+}
+
+#volunteers {
+    float: right;
+    height: 100px;
+    margin-top: -10px;
+}
+
+#login {
+    position: relative;
+    background-image: url('/img/btn-google.png');
+    background-size: 100%;
+    height: 46px;
+    width: 191px;
+    margin-left: -2px;
+    -webkit-transition: all 0.1s linear;
+    -moz-transition: all 0.1s linear;
+    -o-transition: all 0.1s linear;
+    -ms-transition: all 0.1s linear;
+    filter: brightness(100%);
+    -webkit-filter: brightness(100%);
+}
+
+#login:hover {
+    filter: brightness(90%);
+    -webkit-filter: brightness(90%);
+    cursor: pointer;
+}
+
+#login:active {
+    filter: brightness(75%);
+    -webkit-filter: brightness(75%);
+}
