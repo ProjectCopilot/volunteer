@@ -72,7 +72,7 @@ function init() {
 
           } else {
             // Get the next case available as the current case if first case is inactive
-            if (!(CURRENT_CASE && CURRENT_CASENAME) && (cases[k].helped == AUTH_EMAIL || cases[k].helped == false)) {
+            if (!CURRENT_CASE && (cases[k].helped == AUTH_EMAIL || cases[k].helped == false)) {
               CURRENT_CASE = k;
               CURRENT_CASENAME = cases[k].dispay_name;
               $('#currentCaseDisplayName #name').text(cases[k].display_name);
