@@ -108,6 +108,9 @@ function init() {
             inactivated++;
           });
 
+          // if current case is taken by another volunteer, refresh page
+          if ($(`#${CURRENT_CASE}`).hasClass('inactive')) location.reload();
+
           // inform the volunteer that all cases are inactive
           if (inactivated == $('.case').length) {
             $('#currentCaseDisplayName #name').text('No Cases Available.');
