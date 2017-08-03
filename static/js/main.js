@@ -54,7 +54,8 @@ function init() {
         // initially load the cases
         let idCount = 0;
         Object.keys(cases).forEach((k) => {
-          if (idCount === 0) {
+          // By default, set the first case that loads as the volunteer's current active case
+          if (idCount === 0 && (cases[k].helped == AUTH_EMAIL || cases[k].helped == false)) {
             CURRENT_CASE = k;
             CURRENT_CASENAME = cases[k].display_name;
             $('#currentCaseDisplayName #name').text(cases[k].display_name);
@@ -62,24 +63,66 @@ function init() {
 
             const template = `<div class="case active" name="${cases[k].display_name}" id="${k}"><span class="caseName"><span class="ion-${cases[k].gender == 'Non-binary' ? 'transgender' : cases[k].gender.toLowerCase()}"></span> ${cases[k].display_name}</span></div>`;
             $('.cases').append(template);
+
+            // give current volunteer ownership of case
+            db.child('cases').child(CURRENT_CASE).child('helped').set(AUTH_EMAIL);
+            db.child('cases').child(CURRENT_CASE).child('last_modified').set(Date.now());
+            idCount++;
+            return;
+
           } else {
+            // Get the next case available as the current case if first case is inactive
+            if (!(CURRENT_CASE && CURRENT_CASENAME) && (cases[k].helped == AUTH_EMAIL || cases[k].helped == false)) {
+              CURRENT_CASE = k;
+              CURRENT_CASENAME = cases[k].dispay_name;
+              $('#currentCaseDisplayName #name').text(cases[k].display_name);
+              $('#gender').addClass(cases[k].gender == 'Non-binary' ? 'ion-transgender' : 'ion-'+cases[k].gender.toLowerCase());
+
+              const template = `<div class="case active" name="${cases[k].display_name}" id="${k}"><span class="caseName"><span class="ion-${cases[k].gender == 'Non-binary' ? 'transgender' : cases[k].gender.toLowerCase()}"></span> ${cases[k].display_name}</span></div>`;
+              $('.cases').append(template);
+
+              // give current volunteer ownership of case
+              db.child('cases').child(CURRENT_CASE).child('helped').set(AUTH_EMAIL);
+              db.child('cases').child(CURRENT_CASE).child('last_modified').set(Date.now());
+              return;
+            }
+
             const template = `<div class="case" name="${cases[k].display_name}" id="${k}"><span class="caseName"><span class="ion-${cases[k].gender == 'Non-binary' ? 'transgender' : cases[k].gender.toLowerCase()}"></span> ${cases[k].display_name}</span></div>`;
             $('.cases').append(template);
           }
 
           idCount++;
+
         });
 
         updateScroll();
 
         // listen for inactivated cases
         db.child('cases').on('value', (snap) => {
+          var inactivated = 0;
           Object.keys(snap.val()).forEach((k) => {
             $(`#${k}`).removeClass('inactive');
             if (snap.val()[k].helped == AUTH_EMAIL) return;
             if (snap.val()[k].helped == false) return
             $(`#${k}`).addClass('inactive');
+            inactivated++;
           });
+
+          // inform the volunteer that all cases are inactive
+          if (inactivated == $('.case').length) {
+            $('#currentCaseDisplayName #name').text('No Cases Available.');
+            $('#gender').removeClass();
+            $('#gender').text('Please refresh and try again later');
+
+            // wipe all case inputs and data
+            $('.messageSpace').html('');
+            $('#mainInput').val('');
+            $('.notes').val('');
+            db.child('cases').child(CURRENT_CASE).child('messages')
+              .off();
+            CURRENT_CASE = null;
+            CURRENT_CASENAME = null;
+          }
         });
 
         // when a new message arrives
@@ -182,6 +225,9 @@ function init() {
                 time: Date.now()
               }, () => {
                 $('#mainInput').val('');
+
+                // give current volunteer ownership of case
+                db.child('cases').child(CURRENT_CASE).child('helped').set(AUTH_EMAIL);
                 db.child('cases').child(CURRENT_CASE).child('last_modified').set(Date.now());
                 updateTimestamps();
               });
@@ -195,6 +241,9 @@ function init() {
             typingTimer = setTimeout(() => {
               // upload to Firebase
               db.child('cases').child(CURRENT_CASE).child('notes').set($('.notes').val());
+
+              // give current volunteer ownership of case
+              db.child('cases').child(CURRENT_CASE).child('helped').set(AUTH_EMAIL);
               db.child('cases').child(CURRENT_CASE).child('last_modified').set(Date.now());
             }, 200);
         });
@@ -215,6 +264,8 @@ $("#logOut").click(() => {
 function updateScroll() {
   const element = document.getElementsByClassName('messages');
   element[0].scrollTop = element[0].scrollHeight + 100;
+
+  if (!CURRENT_CASENAME) CURRENT_CASENAME = $('#currentCaseDisplayName #name').text();
 }
 
 // refresh pretty message timestamps
