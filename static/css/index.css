@@ -284,6 +284,15 @@ em {
   color: #fff;
 }
 
+.inactive {
+  background-color: #7f8c8d;
+  color: #eee;
+}
+
+.inactive:hover {
+  cursor: not-allowed;
+}
+
 .case {
   font-family: inherit;
   border-bottom: 1px solid rgba(33, 33, 33, 0.2);

@@ -10,6 +10,7 @@ const NUM_MAX_CASES = 10000;
 let CURRENT_CASE = ''; // current case ID
 let CURRENT_CASENAME = ''; // current case name (e.g. Anonymous Cow)
 let AUTH_NAME = ''; // volunteer name (e.g. Ankit Ranjan)
+let AUTH_EMAIL = ''; // volunteer email
 
 // Firebase Config
 const FIREBASE_ID = '{{FIREBASE_ID}}';
@@ -29,6 +30,7 @@ firebase.auth().onAuthStateChanged((user) => {
   if (user) { // The user is already signed in.
     if (AUTH_NAME.length == 0) {
       AUTH_NAME = user.displayName;
+      AUTH_EMAIL = user.email;
       init();
     }
   } else {
@@ -49,7 +51,7 @@ function init() {
   // ask the Mailroom for a list of cases to handle
   $.getJSON(`//${MAILROOM_HOSTNAME}:${MAILROOM_PORT}/api/getRequests/${NUM_MAX_CASES.toString()}`,
       (cases) => {
-      // initially load the cases
+        // initially load the cases
         let idCount = 0;
         Object.keys(cases).forEach((k) => {
           if (idCount === 0) {
@@ -69,6 +71,16 @@ function init() {
         });
 
         updateScroll();
+
+        // listen for inactivated cases
+        db.child('cases').on('value', (snap) => {
+          Object.keys(snap.val()).forEach((k) => {
+            $(`#${k}`).removeClass('inactive');
+            if (snap.val()[k].helped == AUTH_EMAIL) return;
+            if (snap.val()[k].helped == false) return
+            $(`#${k}`).addClass('inactive');
+          });
+        });
 
         // when a new message arrives
         let newMessageListener = db.child('cases').child(CURRENT_CASE).child('messages')
@@ -100,6 +112,8 @@ function init() {
 
         // when the user selects a new case detach current listener
         $('.case').click((evt) => {
+          if ($(`#${evt.currentTarget.id}`).hasClass('inactive')) return;
+
           db.child('cases').child(CURRENT_CASE).child('messages')
             .off();
 
@@ -112,6 +126,10 @@ function init() {
 
           $('.case').removeClass('active');
           $('#'+evt.currentTarget.id).addClass('active');
+
+          // give current volunteer ownership of case
+          db.child('cases').child(CURRENT_CASE).child('helped').set(AUTH_EMAIL);
+          db.child('cases').child(CURRENT_CASE).child('last_modified').set(Date.now());
 
           // change the new message listener to start listening for updates from the new case
           newMessageListener = db.child('cases').child(CURRENT_CASE).child('messages')
@@ -152,7 +170,6 @@ function init() {
           });
         });
 
-
         // new message input
         $('#mainInput').keyup((evt) => {
           if (evt.keyCode === 13 && $("#mainInput").val().length != 0) {
@@ -165,6 +182,7 @@ function init() {
                 time: Date.now()
               }, () => {
                 $('#mainInput').val('');
+                db.child('cases').child(CURRENT_CASE).child('last_modified').set(Date.now());
                 updateTimestamps();
               });
           }
@@ -176,11 +194,12 @@ function init() {
             clearTimeout(typingTimer);
             typingTimer = setTimeout(() => {
               // upload to Firebase
-              db.child('cases').child(CURRENT_CASE).child('notes').set($('.notes').val())
+              db.child('cases').child(CURRENT_CASE).child('notes').set($('.notes').val());
+              db.child('cases').child(CURRENT_CASE).child('last_modified').set(Date.now());
             }, 200);
         });
 
-        //on keydown, clear the countdown
+        // on keydown, clear the countdown
         $('.notes').keydown(() => {
             clearTimeout(typingTimer);
         });
