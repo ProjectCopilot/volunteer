@@ -112,7 +112,7 @@ em {
   left:0;
   top:0;
   border-right: 1px solid rgba(33, 33, 33, 0.2);
-  border-bottom: 1px solid rgba(180, 180, 180, 0.1);
+  border-bottom: 2px solid rgba(180, 180, 180, 0.1);
   font-family: "Proxima Nova";
   font-weight: 700;
   text-align: left;
@@ -282,6 +282,15 @@ em {
 .active {
   background-color: #6698C8;
   color: #fff;
+}
+
+.inactive {
+  background-color: #7f8c8d;
+  color: #eee;
+}
+
+.inactive:hover {
+  cursor: not-allowed;
 }
 
 .case {
