@@ -2,8 +2,7 @@
 // Project Copilot Volunteer Client
 // Copyright 2017 Project Copilot
 
-const MAILROOM_HOSTNAME = '{{MAILROOM_HOSTNAME}}';
-const MAILROOM_PORT = '{{MAILROOM_PORT}}';
+const MAILROOM_URL = '{{MAILROOM_URL}}';
 
 // max number of cases
 const NUM_MAX_CASES = 10000;
@@ -49,7 +48,7 @@ function init() {
   const db = firebase.database().ref('/');
 
   // ask the Mailroom for a list of cases to handle
-  $.getJSON(`//${MAILROOM_HOSTNAME}:${MAILROOM_PORT}/api/getRequests/${NUM_MAX_CASES.toString()}`,
+  $.getJSON(`//${MAILROOM_URL}/api/getRequests/${NUM_MAX_CASES.toString()}`,
       (cases) => {
         // initially load the cases
         let idCount = 0;
