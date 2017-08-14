@@ -18,8 +18,7 @@ app.get('/js/main.js', (req, res) => {
     const script = data
       .replace(/{{FIREBASE_ID}}/g, process.env.FIREBASE_ID)
       .replace(/{{FIREBASE_API_KEY}}/g, process.env.FIREBASE_CLIENT_API_KEY)
-      .replace(/{{MAILROOM_PORT}}/g, process.env.MAILROOM_PORT)
-      .replace(/{{MAILROOM_HOSTNAME}}/g, process.env.MAILROOM_HOSTNAME);
+      .replace(/{{MAILROOM_URL}}/g, process.env.MAILROOM_URL)
     res.send(script);
   });
 });
