@@ -128,152 +128,171 @@ function init() {
           }
         });
 
-        // when a new message arrives
-        let newMessageListener = db.child('cases').child(CURRENT_CASE).child('messages')
-          .on('child_added', (s) => {
-            if (s.val() != null) {
-              const message = s.val();
-              if (s.val().sender === 'user') {
-                $('.messageSpace')
-                  .append(`<div class="message from" id="${s.name}">
-                            <div class="sender_name">${message.sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}
-                            <div class="date" datetime="${message.time}"></div>
-                          </div>${message.body}</div>`);
-              } else {
-                $('.messageSpace')
-                  .append(`<div class="message to" id="${s.name}">
-                            <div class="sender_name">${message.sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}
-                            <div class="date" datetime="${message.time}"></div>
-                          </div>${message.body}</div>`);
-              }
-              updateScroll();
-              updateTimestamps();
-            }
-        });
+          // when a new message arrives
+          let newMessageListener = db.child('cases').child(CURRENT_CASE).child('messages')
+              .on('child_added', (s) => {
+		  if (s.val() != null) {
+		      const message = s.val();
+		      if (s.val().sender === 'user') {
+			  $('.messageSpace')
+			      .append(`<div class="message from" id="${s.key}">
+				      <div class="sender_name">${message.sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}
+				      <div class="date" datetime="${message.time}"></div>
+				      </div>${message.body}</div>`);
+		      } else {
+			  $('.messageSpace')
+			      .append(`<div class="message to" id="${s.key}">
+				      <div class="sender_name">${message.sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}
+				      <div class="date" datetime="${message.time}"></div>
+				      </div>${message.body}</div>`);
+		      }
 
-        // initially poll the Firebase for current case's notes
-        db.child('cases').child(CURRENT_CASE).child('notes').once('value', (s) => {
-            $('.notes').val(s.val() == null ? '' : s.val());
-        });
-
-        // when the user selects a new case detach current listener
-        $('.case').click((evt) => {
-          if ($(`#${evt.currentTarget.id}`).hasClass('inactive')) return;
-
-          db.child('cases').child(CURRENT_CASE).child('messages')
-            .off();
-
-          CURRENT_CASE = evt.currentTarget.id;
-          CURRENT_CASENAME = $('#'+evt.currentTarget.id).children('.caseName').text();
-
-          $('#currentCaseDisplayName #name').text($('#'+evt.currentTarget.id).children('.caseName').text());
-          $("#gender").removeClass($("#gender").attr('class'));
-          $('#gender').addClass($('#'+evt.currentTarget.id).children('.caseName').children('span:nth-child(1)').attr('class'));
-
-          $('.case').removeClass('active');
-          $('#'+evt.currentTarget.id).addClass('active');
-
-          // give current volunteer ownership of case
-          db.child('cases').child(CURRENT_CASE).child('helped').set(AUTH_EMAIL);
-          db.child('cases').child(CURRENT_CASE).child('last_modified').set(Date.now());
-
-          // change the new message listener to start listening for updates from the new case
-          newMessageListener = db.child('cases').child(CURRENT_CASE).child('messages')
-            .on('child_added', (s) => {
-                const message = s.val();
-                $('.messageSpace')
-                  .append(`<div class="message
-                  ${s.val().sender === 'user' ? "from" : "to"}
-                  " id="${s.name}"><div class="sender_name">${message.sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}
-        	          <div class="date" datetime="${message.time}"></div>
-                  </div>${message.body}</div>`);
-
-              updateScroll();
-              updateTimestamps();
-            });
-
-          // pull the selected case's conversation
-          db.child('cases').child(CURRENT_CASE).child('messages')
-            .once('value', (s) => {
-              const message = s.val();
-              $('.messageSpace').html(''); // wipe messageSpace content
-              if (s.val() !== null) {
-                Object.keys(message).forEach((id) => {
-                    $('.messageSpace')
-                      .append(`<div class="message
-                      ${message[id].sender === 'user' ? 'from': 'to'}
-                      " id="${id}"><div class="sender_name">${message[id].sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}
-		                    <div class="date" datetime="${message[id].time}"></div>
-                      </div>${message[id].body}</div>`);
-                });
-
-                updateTimestamps();
-              }
-            });
-
-          db.child('cases').child(CURRENT_CASE).child('notes').once('value', (s) => {
-            $('.notes').val(s.val() == null ? '' : s.val());
-          });
-        });
-
-        // new message input
-        $('#mainInput').keyup((evt) => {
-          if (evt.keyCode === 13 && $("#mainInput").val().length != 0) {
-            db.child('cases').child(CURRENT_CASE).child('messages')
-              .push({
-                body: $('#mainInput').val(),
-                sent: false,
-                sender: 'volunteer',
-                from: 'copilot',
-                time: Date.now()
-              }, () => {
-                $('#mainInput').val('');
-
-                // give current volunteer ownership of case
-                db.child('cases').child(CURRENT_CASE).child('helped').set(AUTH_EMAIL);
-                db.child('cases').child(CURRENT_CASE).child('last_modified').set(Date.now());
-                updateTimestamps();
+		      if (s.val().sent == 'failed')
+			  $(`#${s.key}`).append(`&nbsp; <span class="failed ion-close-circled"></span>`);
+		      
+		      updateScroll();
+		      updateTimestamps();
+		  }
               });
-          }
-        });
 
-        // notes real-time editing
-        var typingTimer;
-        $('.notes').keyup(() => {
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(() => {
-              // upload to Firebase
-              db.child('cases').child(CURRENT_CASE).child('notes').set($('.notes').val());
+	  // when a message fails to send
+	  let failedMessageListener = db.child('cases').child(CURRENT_CASE).child('messages').on('child_changed', (s) => {
+	      if (s.val().sent == 'failed')
+		  $(`#${s.key}`).append(`&nbsp; <span class="failed ion-close-circled"></span>`);
+	  });
+	  
+          // initially poll the Firebase for current case's notes
+          db.child('cases').child(CURRENT_CASE).child('notes').once('value', (s) => {
+              $('.notes').val(s.val() == null ? '' : s.val());
+          });
+
+          // when the user selects a new case detach current listener
+          $('.case').click((evt) => {
+              if ($(`#${evt.currentTarget.id}`).hasClass('inactive')) return;
+
+              db.child('cases').child(CURRENT_CASE).child('messages')
+		  .off();
+
+              CURRENT_CASE = evt.currentTarget.id;
+              CURRENT_CASENAME = $('#'+evt.currentTarget.id).children('.caseName').text();
+
+              $('#currentCaseDisplayName #name').text($('#'+evt.currentTarget.id).children('.caseName').text());
+              $("#gender").removeClass($("#gender").attr('class'));
+              $('#gender').addClass($('#'+evt.currentTarget.id).children('.caseName').children('span:nth-child(1)').attr('class'));
+
+              $('.case').removeClass('active');
+              $('#'+evt.currentTarget.id).addClass('active');
 
               // give current volunteer ownership of case
               db.child('cases').child(CURRENT_CASE).child('helped').set(AUTH_EMAIL);
               db.child('cases').child(CURRENT_CASE).child('last_modified').set(Date.now());
-            }, 200);
-        });
 
-        // on keydown, clear the countdown
-        $('.notes').keydown(() => {
-            clearTimeout(typingTimer);
-        });
+              // change the new message listener to start listening for updates from the new case
+              newMessageListener = db.child('cases').child(CURRENT_CASE).child('messages')
+		  .on('child_added', (s) => {
+                      const message = s.val();
+                      $('.messageSpace')
+			  .append(`<div class="message
+${s.val().sender === 'user' ? "from" : "to"}
+" id="${s.key}"><div class="sender_name">${message.sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}
+        			  <div class="date" datetime="${message.time}"></div>
+				  </div>${message.body}</div>`);
+				 
+		      updateScroll();
+		      updateTimestamps();
+		  });
+
+	      // update failed message handler for new messages
+	      failedMessageListener = db.child('cases').child(CURRENT_CASE).child('messages').on('child_changed', (s) => {
+		  if (s.val().sent == 'failed')
+		      $(`#${s.key}`).append(`&nbsp; <span class="failed ion-close-circled"></span>`);
+	      });
+	      
+              // pull the selected case's conversation
+              db.child('cases').child(CURRENT_CASE).child('messages')
+		  .once('value', (s) => {
+		      const message = s.val();
+		      $('.messageSpace').html(''); // wipe messageSpace content
+		      if (s.val() !== null) {
+			  Object.keys(message).forEach((id) => {
+			      $('.messageSpace')
+				  .append(`<div class="message
+${message[id].sender === 'user' ? 'from': 'to'}
+" id="${id}"><div class="sender_name">${message[id].sender === 'user' ? CURRENT_CASENAME: 'Copilot Volunteer'}
+					  <div class="date" datetime="${message[id].time}"></div>
+					  </div>
+					  ${message[id].body}
+					  ${message[id].sent == 'failed' ? '&nbsp; <span class="failed ion-close-circled"></span>':''}
+					  </div>`);
+			  });
+
+			  updateTimestamps();
+		      }
+		  });
+
+              db.child('cases').child(CURRENT_CASE).child('notes').once('value', (s) => {
+		  $('.notes').val(s.val() == null ? '' : s.val());
+              });
+          });
+
+          // new message input
+          $('#mainInput').keyup((evt) => {
+              if (evt.keyCode === 13 && $("#mainInput").val().length != 0) {
+		  db.child('cases').child(CURRENT_CASE).child('messages')
+		      .push({
+			  body: $('#mainInput').val(),
+			  sent: false,
+			  sender: 'volunteer',
+			  from: 'copilot',
+			  time: Date.now()
+		      }, () => {
+			  $('#mainInput').val('');
+
+			  // give current volunteer ownership of case
+			  db.child('cases').child(CURRENT_CASE).child('helped').set(AUTH_EMAIL);
+			  db.child('cases').child(CURRENT_CASE).child('last_modified').set(Date.now());
+			  updateTimestamps();
+		      });
+              }
+          });
+
+          // notes real-time editing
+          var typingTimer;
+          $('.notes').keyup(() => {
+              clearTimeout(typingTimer);
+              typingTimer = setTimeout(() => {
+		  // upload to Firebase
+		  db.child('cases').child(CURRENT_CASE).child('notes').set($('.notes').val());
+
+		  // give current volunteer ownership of case
+		  db.child('cases').child(CURRENT_CASE).child('helped').set(AUTH_EMAIL);
+		  db.child('cases').child(CURRENT_CASE).child('last_modified').set(Date.now());
+              }, 200);
+          });
+
+          // on keydown, clear the countdown
+          $('.notes').keydown(() => {
+              clearTimeout(typingTimer);
+          });
       });
 }
 
 // when logout button is pressed
 $("#logOut").click(() => {
-  firebase.auth().signOut();
+    firebase.auth().signOut();
 });
 
 // update bottom of .messageSpace UI handler
 function updateScroll() {
-  const element = document.getElementsByClassName('messages');
-  element[0].scrollTop = element[0].scrollHeight + 100;
+    const element = document.getElementsByClassName('messages');
+    element[0].scrollTop = element[0].scrollHeight + 100;
 
-  if (!CURRENT_CASENAME) CURRENT_CASENAME = $('#currentCaseDisplayName #name').text();
+    if (!CURRENT_CASENAME) CURRENT_CASENAME = $('#currentCaseDisplayName #name').text();
 }
 
 // refresh pretty message timestamps
 function updateTimestamps() {
-  timeago.cancel();
-  const timestamps = document.querySelectorAll('.date');
-  time.render(timestamps);
+    timeago.cancel();
+    const timestamps = document.querySelectorAll('.date');
+    time.render(timestamps);
 }
