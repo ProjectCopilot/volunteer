@@ -64,7 +64,14 @@ function init() {
             $('.cases').append(template);
 
             // give current volunteer ownership of case
-            db.child('cases').child(CURRENT_CASE).child('helped').set(AUTH_EMAIL);
+            db.child('cases').child(CURRENT_CASE).child('helped').set(AUTH_EMAIL).catch((e) => {
+		// find out if the user is verified, if not kick them out
+		if (e.code == "PERMISSION_DENIED") {
+		    firebase.auth().signOut().then(() => {	
+			location.href = "/login";
+		    });
+		}
+	    });
             db.child('cases').child(CURRENT_CASE).child('last_modified').set(Date.now());
             idCount++;
             return;
