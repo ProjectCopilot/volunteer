@@ -6,10 +6,16 @@
 const express = require('express');
 const app = express();
 const fs = require('fs');
+const keen = require('keen-tracking');
 
 require('colors');
 require('dotenv').config({ path: `${__dirname}/.env` });
 
+// Initialize analytics tracking
+let analytics = new keen({
+    projectId: process.env.KEEN_PROJECTID,
+    writeKey: process.env.KEEN_WRITEKEY
+});
 
 app.get('/js/main.js', (req, res) => {
   res.header('Content-Type', 'application/javascript');
@@ -38,6 +44,11 @@ app.use('/login', (req, res) => {
   res.sendFile(`${__dirname}/static/login.html`);
 });
 
+app.use('/', (req, res, next) => {
+    if (req.originalUrl == '/')
+	analytics.addEvent('volunteer_pageviews', {});
+    next();
+});
 app.use('/', express.static(`${__dirname}/static`));
 
 app.listen(process.env.PORT, process.env.HOSTNAME, function () {
